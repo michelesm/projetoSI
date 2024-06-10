@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.namespace }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    cloud.google.com/backend-config: {{  tpl .Values.ingressAnnotations.backendConfig . | toJson }}
+spec:
+  selector:
+    app: {{ .Values.appName }}-{{ .Values.namespace }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.containerPort }}

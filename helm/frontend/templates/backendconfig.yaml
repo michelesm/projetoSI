@@ -1,0 +1,14 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-{{ .Values.namespace }}
+spec:
+  timeoutSec: 300
+  healthCheck:
+    timeoutSec: 300
+    checkIntervalSec: 300
+    unhealthyThreshold: 10
+    healthyThreshold: 1
+    type: HTTP
+    requestPath: {{ .Values.healthCheckPath }}

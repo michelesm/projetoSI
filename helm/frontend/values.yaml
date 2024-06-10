@@ -1,0 +1,20 @@
+appName: myapp-frontend
+namespace: default
+healthCheckPath: /health
+ingressAnnotations:
+  backendConfig: '{"default": "{{ .Values.appName }}-{{ .Values.namespace }}" }'
+replica: 1
+containerPort: 8080
+containerImage: michelesm/myapp:latest
+staticIpName: myApp-development #For GKE cluster
+certMapName: myApp-wildcard-map # Certificate
+envars: 
+  -
+    name: "FLASK_APP"
+    value: "/app/server.py"
+  -
+    name: "FLASK_ENV"
+    value: "development"
+  -
+    name: "API_URL"
+    value: "myapp-backend.default.svc.cluster.local"

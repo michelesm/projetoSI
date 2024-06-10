@@ -1,0 +1,60 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.namespace }}-gateway
+  namespace: {{ .Values.namespace }}
+  annotations:
+    networking.gke.io/certmap: {{ .Values.certMapName }}
+spec:
+  gatewayClassName: gke-l7-global-external-managed
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        kinds:
+        - kind: HTTPRoute
+        namespaces:
+          from: All
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        kinds:
+        - kind: HTTPRoute
+        namespaces:
+          from: All
+  addresses:
+    - type: NamedAddress
+      value: {{ .Values.staticIpName }}
+---
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-{{ .Values.namespace }}-backend
+spec:
+  parentRefs:
+  - namespace: {{ .Values.namespace }}
+    name: {{ .Values.appName }}-{{ .Values.namespace }}-gateway
+    sectionName: https
+  rules:
+  - backendRefs:
+    - name: {{ .Values.appName }}-{{ .Values.namespace }}
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-{{ .Values.namespace }}-http-filter-redirect
+spec:
+  parentRefs:
+  - namespace: {{ .Values.namespace }}
+    name: {{ .Values.appName }}-{{ .Values.namespace }}-gateway
+    sectionName: http
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https

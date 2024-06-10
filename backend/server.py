@@ -27,3 +27,7 @@ def login():
             return "Forbidden", 403
         else:
             return "Ok", 200
+
+@app.route('/health')
+def health():
+    return "ok"
