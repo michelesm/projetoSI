@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  frontend:
+    container_name: myapp-frontend
+    image: myapp-frontend
+    build: ./frontend
+    ports:
+      - 3000:8080
+    volumes:
+      - ./frontend:/app
+    environment:
+      FLASK_APP: /app/server.py
+      FLASK_ENV: development
+      API_URL: http://backend:8080
+  backend:
+    container_name: myapp-backend
+    image: myapp-backend
+    build: ./backend
+    ports:
+      - 5000:8080
+    volumes:
+      - ./backend:/app
+    environment:
+      FLASK_APP: /app/server.py
+      FLASK_ENV: development
+      MYSQL_HOST: mysql
+      MYSQL_ROOT_PASSWORD: myapp321
+      MYSQL_USER: root
+      MYSQL_DATABASE: myapp
+  mysql:
+    hostname: myapp-db
+    container_name: myapp-db
+    image: myapp-db
+    build: ./mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: myapp321
+      MYSQL_DATABASE: myapp
