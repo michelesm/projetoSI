@@ -191,3 +191,27 @@ O comando docker-compose up --build força a reconstrução das imagens definida
 # Kubernets
 
 O diretório helms possui a estruturação para que os serviços sejam executados via kubernets ao invés do docker compose
+
+# Dockerfile multistage
+
+Nos diretórios de backend e frontend há um arquivo configurado com o multistage, para utilizar este dockerfile é preciso substituir o dockerfile atual por estes
+
+# Dockerhub
+
+### Frontend
+
+```shell
+docker pull michelesm/ubuntu-myapp-frontend
+```
+
+### Backend
+
+```shell
+docker pull michelesm/ubuntu-myapp-backend
+```
+
+### DB
+
+```shell
+docker pull michelesm/ubuntu-myapp-db
+```
