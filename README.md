@@ -188,3 +188,6 @@ docker-compose up --builder
 O comando docker-compose up --build força a reconstrução das imagens definidas no arquivo docker-compose.yml antes de criar e iniciar os contêineres correspondentes. É especialmente útil para garantir que qualquer mudança no Dockerfile ou nas dependências do projeto seja incluída nos contêineres em execução.
 
 
+# Kubernets
+
+O diretório helms possui a estruturação para que os serviços sejam executados via kubernets ao invés do docker compose
