@@ -7,7 +7,7 @@ Este projeto é feito em python e hospedado através do docker. É utilizada a b
 
 Passo opcional, também é possível rodar localmente
 
-## Atualize o indíce de pacotes APT:
+## Atualizar o indíce de pacotes APT:
 
 ```shell
 sudo apt update
@@ -75,7 +75,94 @@ git clone https://github.com/michelesm/projetoSI.git
 ```
 
 
-## Construir e iniciar serviços (Backend, Frontend e banco de dados)
+# Construir e iniciar serviços (Backend, Frontend e banco de dados) 
+
+Cada serviço pode ter sua imagem e container criados individualmente(um por vez), ou atravez do docker composer, que permite definir múltiplos serviços (cada um rodando em um contêiner) em um único arquivo docker-compose.yml
+
+## Iniciando INDIVIDUALMENTE
+
+### Construir e Rodar o Contêiner do Frontend
+
+#### Navegar para o diretório do frontend e construir a imagem:
+
+```shell
+cd ./frontend
+docker build -t myapp-frontend .
+```
+
+#### Rodar o contêiner do frontend:
+
+```shell
+docker run -d \
+  --name myapp-frontend \
+  -p 3000:8080 \
+  -v $(pwd):/app \
+  -e FLASK_APP=/app/server.py \
+  -e FLASK_ENV=development \
+  -e API_URL=http://myapp-backend:8080 \
+  myapp-frontend
+```
+
+### Construir e Rodar o Contêiner do Backend
+
+#### Navegar para o diretório do backend e construir a imagem:
+```shell
+cd ../backend
+docker build -t myapp-backend .
+```
+
+#### Rodar o contêiner do backend:
+```shell
+docker run -d \
+  --name myapp-backend \
+  -p 5000:8080 \
+  -v $(pwd):/app \
+  -e FLASK_APP=/app/server.py \
+  -e FLASK_ENV=development \
+  -e MYSQL_HOST=myapp-db \
+  -e MYSQL_ROOT_PASSWORD=myapp321 \
+  -e MYSQL_USER=root \
+  -e MYSQL_DATABASE=myapp \
+  myapp-backend
+```
+
+### Construir e Rodar o Contêiner do MySQL
+
+#### Navegar para o diretório do MySQL e construir a imagem:
+```shell
+cd ../mysql
+docker build -t myapp-db .
+```
+
+#### Rodar o contêiner do MySQL:
+```shell
+docker run -d \
+  --hostname myapp-db \
+  --name myapp-db \
+  --restart always \
+  -e MYSQL_ROOT_PASSWORD=myapp321 \
+  -e MYSQL_DATABASE=myapp \
+  myapp-db
+```
+
+### Configurar a Rede
+
+Para que os contêineres possam se comunicar uns com os outros é necessário criar uma rede Docker personalizada e conectar os contêineres a essa rede.
+
+#### Criar uma rede personalizada:
+```shell
+docker network create myapp-network
+```
+
+#### Conectar os contêineres à rede personalizada:
+```shell
+docker network connect myapp-network myapp-frontend
+docker network connect myapp-network myapp-backend
+docker network connect myapp-network myapp-db
+```
+
+
+## Iniciando serviços via Docker compose
 
 ```shell
 # Acessar diretório do projeto
@@ -84,7 +171,7 @@ cd projetoSI
 
 ```
 
-### Parar e remove contêineres, redes personalizadas e volumes anônimos criados anteriormente
+### Parar e remover contêineres, redes personalizadas e volumes anônimos criados anteriormente
 
 ```shell
 docker-compose down
