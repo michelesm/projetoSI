@@ -77,7 +77,7 @@ git clone https://github.com/michelesm/projetoSI.git
 
 # Construir e iniciar serviços (Backend, Frontend e banco de dados) 
 
-Cada serviço pode ter sua imagem e container criados individualmente(um por vez), ou atravez do docker composer, que permite definir múltiplos serviços (cada um rodando em um contêiner) em um único arquivo docker-compose.yml
+Cada serviço pode ter sua imagem e container criados individualmente(um por vez), ou através do docker composer, que permite definir múltiplos serviços (cada um rodando em um contêiner) em um único arquivo docker-compose.yml
 
 ## Iniciando INDIVIDUALMENTE
 
