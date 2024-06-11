@@ -17,18 +17,72 @@ sudo apt update
 
 ```shell
 
-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common # Instala os pacotes necessários para permitir o uso de repositórios via HTTPS
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - #Adiciona a chave GPG oficial do Docker
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" # Adiciona o repositório do Docker às fontes APT
-sudo apt-get update # Atualiza o índice de pacotes novamente
-sudo apt-get install docker-ce #está instalando a partir do repositório Docker em vez do repositório padrão do Ubuntu
-sudo systemctl status docker # Instale o Docker
+# Instala os pacotes necessários para permitir o uso de repositórios via HTTPS
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+# Adiciona a chave GPG oficial do Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+#Adicione o repositório do Docker às fontes APT
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Atualiza o índice de pacotes novamente
+sudo apt-get update
+
+# Verifica que a instalação está sendo feita a partir do repositório Docker em vez do repositório padrão do Ubuntu
+apt-cache policy docker-ce 
+
+# Instala o Docker
+sudo apt-get install docker-ce 
+
+# Verifica que o Docker está funcionando
+sudo systemctl status docker 
 
 
 ```
 
-# Contruir e iniciar serviços (Backend, Frontend e banco de dados)
 
+## Instalação do Docker Compose
+
+```shell
+
+# Baixa a versão mais recente do Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+
+# Aplica as permissões executáveis ao binário
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+# Verifica a instalação
+docker-compose --version
+
+
+```
+
+# Configurar e rodar o Projeto
+
+## Clonar repositório
+
+```shell
+#instalar git, caso não tenha instalado
+
+sudo apt-get update 
+sudo apt-get install git
+# Clonar repositório
+git clone https://github.com/michelesm/projetoSI.git
+
+```
+
+
+## Construir e iniciar serviços (Backend, Frontend e banco de dados)
+
+```shell
+# Acessar diretório do projeto
+
+cd projetoSI 
+
+```
 
 #### Parar e remove contêineres, redes personalizadas e volumes anônimos criados anteriormente
 
