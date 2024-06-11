@@ -84,16 +84,14 @@ cd projetoSI
 
 ```
 
-#### Parar e remove contêineres, redes personalizadas e volumes anônimos criados anteriormente
-
-Este comando é útil para limpar o ambiente Docker criado por um projeto Docker Compose, garantindo que não fiquem contêineres ou redes residuais.
+### Parar e remove contêineres, redes personalizadas e volumes anônimos criados anteriormente
 
 ```shell
 docker-compose down
 ```
+Este comando é útil para limpar o ambiente Docker criado por um projeto Docker Compose, garantindo que não fiquem contêineres ou redes residuais.
 
-
-#### Construir e iniciar todos os serviços definidos no arquivo docker-compose.yml
+### Construir e iniciar todos os serviços definidos no arquivo docker-compose.yml
 
 
 ```shell
